@@ -39,17 +39,17 @@ class PDUAccessory {
 			promises.push(this.snmp_get(slice))
 		}
 		Promise.all(promises)
-			.then(function(results) {
+			.then(results => {
 				return results.reduce(function(prev, current) {
 					return prev.concat(current);
 				}, []);
 			})
-			.then(function(varbinds) {
-				return varbinds.map(function(varbind) {
+			.then(varbinds => {
+				return varbinds.map(varbind => {
 					return varbind.value.toString().split(",")[0];
 				});
 			})
-			.then(function(names) {
+			.then(names => {
 				for (var i = 0; i < names.length; i++) {
 					var name = names[i]
 					service = this.services[i];
@@ -57,10 +57,10 @@ class PDUAccessory {
 					service.setCharacteristic(Characteristic.Name, name);
 				}
 				this.log.info('Successfully loaded outlet names: ', names.join(', '));
-			}.bind(this))
-			.catch(function(error) {
+			})
+			.catch(error => {
 				this.log.error(error.stack);
-			}.bind(this));
+			});
 	}
 
 	getServices() {
@@ -71,34 +71,34 @@ class PDUAccessory {
 		this.log.info(`Retrieving socket ${index}.`);
 		var switch_oid = '1.3.6.1.4.1.17420.1.2.9.1.13.0';
 		this.snmp_get([switch_oid])
-			.then(function(varbinds) {
+			.then(varbinds => {
 				return varbinds[0].value.toString().split(',');
 			})
-			.then(function(switches) {
+			.then(switches => {
 				return switches[index] == "1"
 			})
-			.then(function(on) {
+			.then(on => {
 				this.log.info(`Socket ${index} is ${on}.`);
 				callback(null, on);
-			}.bind(this))
-			.catch(function(error) {
+			})
+			.catch(error => {
 				this.log.info(`Error retrieving socket ${index} status.`);
 				callback(error, null);
-			}.bind(this));
+			});
 	}
 
 	setOn(index, on, callback) {
 		this.log.info(`Switching socket ${index} to ${on}.`);
 		var switch_oid = '1.3.6.1.4.1.17420.1.2.9.1.13.0';
 		this.snmp_get([switch_oid])
-			.then(function(varbinds) {
+			.then(varbinds => {
 				return varbinds[0].value.toString().split(',');
 			})
-			.then(function(switches) {
+			.then(switches => {
 				switches[index] = on ? '1' : '0';
 				return switches.join();
 			})
-			.then(function(switch_str) {
+			.then(switch_str => {
 				var varbinds = [
 					{
 						oid: switch_oid,
@@ -107,16 +107,16 @@ class PDUAccessory {
 					}
 				];
 				return varbinds
-			}.bind(this))
+			})
 			.then(this.snmp_set)
-			.then(function() {
+			.then(() => {
 				this.log.info(`Successfully switched socket ${index} to ${on}.`);
 				callback(null);
-			}.bind(this))
-			.catch(function(error) {
+			})
+			.catch(error => {
 				this.log.error(`Error switching socket ${index} to ${on}.`);
 				callback(error);
-			}.bind(this));
+			});
 	}
 
 }
