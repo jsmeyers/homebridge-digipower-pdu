@@ -1,6 +1,6 @@
 "use strict";
+var promisify = require("es6-promisify");
 var snmp = require("net-snmp");
-var Q = require("q");
 
 var Characteristic, Service;
 
@@ -26,8 +26,8 @@ class PDUAccessory {
 		}
 
 		this.snmp = snmp.createSession(config.ip, config.snmp_community);
-		this.snmp_get = Q.denodeify(this.snmp.get.bind(this.snmp));
-		this.snmp_set = Q.denodeify(this.snmp.set.bind(this.snmp));
+		this.snmp_get = promisify(this.snmp.get.bind(this.snmp));
+		this.snmp_set = promisify(this.snmp.set.bind(this.snmp));
 
 		var outlet_oids = [];
 		for (var i = 0; i < 8; i++) {
@@ -38,7 +38,7 @@ class PDUAccessory {
 			var slice = outlet_oids.slice(i, i + 2);
 			promises.push(this.snmp_get(slice))
 		}
-		Q.all(promises)
+		Promise.all(promises)
 			.then(function(results) {
 				return results.reduce(function(prev, current) {
 					return prev.concat(current);
@@ -58,7 +58,7 @@ class PDUAccessory {
 				}
 				this.log.info('Successfully loaded outlet names: ', names.join(', '));
 			}.bind(this))
-			.then(null, function(error) {
+			.catch(function(error) {
 				this.log.error(error.stack);
 			}.bind(this));
 	}
@@ -80,7 +80,8 @@ class PDUAccessory {
 			.then(function(on) {
 				this.log.info(`Socket ${index} is ${on}.`);
 				callback(null, on);
-			}.bind(this), function(error) {
+			}.bind(this))
+			.catch(function(error) {
 				this.log.info(`Error retrieving socket ${index} status.`);
 				callback(error, null);
 			}.bind(this));
@@ -111,7 +112,8 @@ class PDUAccessory {
 			.then(function() {
 				this.log.info(`Successfully switched socket ${index} to ${on}.`);
 				callback(null);
-			}.bind(this), function(error) {
+			}.bind(this))
+			.catch(function(error) {
 				this.log.error(`Error switching socket ${index} to ${on}.`);
 				callback(error);
 			}.bind(this));
