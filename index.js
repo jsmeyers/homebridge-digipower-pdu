@@ -40,16 +40,13 @@ class PDUAccessory {
 		}
 		Promise.all(promises)
 			.then(results => {
-				return results.reduce(function(prev, current) {
-					return prev.concat(current);
-				}, []);
-			})
-			.then(varbinds => {
-				return varbinds.map(varbind => {
-					return varbind.value.toString().split(",")[0];
-				});
-			})
-			.then(names => {
+				var names = results
+					.reduce((prev, current) => {
+						return prev.concat(current);
+					}, [])
+					.map(varbind => {
+						return varbind.value.toString().split(",")[0];
+					});
 				for (var i = 0; i < names.length; i++) {
 					var name = names[i]
 					service = this.services[i];
@@ -72,12 +69,8 @@ class PDUAccessory {
 		var switch_oid = '1.3.6.1.4.1.17420.1.2.9.1.13.0';
 		this.snmp_get([switch_oid])
 			.then(varbinds => {
-				return varbinds[0].value.toString().split(',');
-			})
-			.then(switches => {
-				return switches[index] == "1"
-			})
-			.then(on => {
+				var switches = varbinds[0].value.toString().split(',');
+				var on = switches[index] == "1"
 				this.log.info(`Socket ${index} is ${on}.`);
 				callback(null, on);
 			})
@@ -92,14 +85,10 @@ class PDUAccessory {
 		var switch_oid = '1.3.6.1.4.1.17420.1.2.9.1.13.0';
 		this.snmp_get([switch_oid])
 			.then(varbinds => {
-				return varbinds[0].value.toString().split(',');
-			})
-			.then(switches => {
+				var switches = varbinds[0].value.toString().split(',');
 				switches[index] = on ? '1' : '0';
-				return switches.join();
-			})
-			.then(switch_str => {
-				var varbinds = [
+				var switch_str = switches.join();
+				varbinds = [
 					{
 						oid: switch_oid,
 						type: snmp.ObjectType.OctetString,
