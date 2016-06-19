@@ -8,7 +8,7 @@ module.exports = function(homebridge) {
 	Service = homebridge.hap.Service;
 	Characteristic = homebridge.hap.Characteristic;
 
-	homebridge.registerAccessory("homebridge-test", "DigiPower PDU", PDUAccessory);
+	homebridge.registerAccessory("homebridge-digipower-pdu", "DigiPower PDU", PDUAccessory);
 }
 
 class PDUAccessory {
