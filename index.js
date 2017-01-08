@@ -108,6 +108,10 @@ class PDUAccessory {
 	}
 
 	setOn(index, on, callback) {
+		if (on == 0)
+		{
+    			on = 2;
+		};
 		this.log.info(`Switching POE interface ${index} to ${on}.`);
 		var switch_oid = '1.3.6.1.2.1.2.2.1.7';
 		var testoid = switch_oid + '.' + index;
