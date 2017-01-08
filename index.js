@@ -89,6 +89,7 @@ class PDUAccessory {
 		this.log.info(`Switching POE interface ${index} to ${on}.`);
 		var switch_oid = '1.3.6.1.2.1.105.1.1.1.3.1.21';
 		var testoid = switch_oid + '.' + index;
+		this.log.info(testoid);
 		this.snmp_get([testoid])
 			.then(varbinds => {
 				this.log.info(varbinds);
