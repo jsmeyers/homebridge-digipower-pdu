@@ -21,16 +21,16 @@ class PDUAccessory {
 		var switch_oid = '1.3.6.1.2.1.2.1.0';
 		portcounted  = this.portcount_get([switch_oid])
 			.then(varbinds => {
-				console.log.info(varbinds);
+				this.log.info(varbinds);
 				var switches = varbinds[0].value.toString().split(',');
-				console.log.info(switches);
+				this.log.info(switches);
 				callback(switches);
 			})
 			.catch(error => {
 				console.log.info(`Error retrieving interface count.`);
 				callback(error, null);
 			});
-		this.log.info(portcounted);
+		this.log.info('Counted this many ports: ' + portcounted);
 		for (var i = 0; i < 25; i++) {
 			var service = new Service.Outlet(`Outlet ${i}`, i);
 			this.services.push(service);
@@ -47,7 +47,7 @@ class PDUAccessory {
 		this.snmp_set = promisify(this.snmp.set.bind(this.snmp));
 
 		var outlet_oids = [];
-		for (var i = 0; i < 25; i++) {
+		for (var i = 0; i < ; i++) {
 			outlet_oids.push(`1.3.6.1.2.1.31.1.1.1.18.${i + 1}`);
 			console.log(`oids.push 1.3.6.1.2.1.31.1.1.1.18.${i + 1}`)	
 		}
