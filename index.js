@@ -18,6 +18,7 @@ class PDUAccessory {
 		this.services = [];
 		this.portcount = snmp.createSession(config.ip, config.snmp_community);
 		var switch_oid = '1.3.6.1.2.1.2.1.0';
+		var varbinds = [];
 		varbinds = this.portcount.get(switch_oid);
 		this.log.info(varbinds);
 		var portcounted = varbinds[0].value.toString().split(',');
