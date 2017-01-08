@@ -103,7 +103,7 @@ class PDUAccessory {
 				varbinds = [
 					{
 						oid: testoid,
-						type: snmp.ObjectType.OctetString,
+						type: snmp.ObjectType.Integer,
 						value: switch_str
 					}
 				];
