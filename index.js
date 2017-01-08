@@ -27,7 +27,7 @@ class PDUAccessory {
 				callback(switches);
 			})
 			.catch(error => {
-				console.log.info(`Error retrieving interface count.`);
+				this.log.info(`Error retrieving interface count.`);
 				callback(error, null);
 			});
 		this.log.info('Counted this many ports: ' + portcounted);
