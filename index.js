@@ -75,7 +75,7 @@ class PDUAccessory {
 				this.log.info(varbinds);
 				var switches = varbinds[0].value.toString().split(',');
 				this.log.info(switches)
-				var on = switches[index] == "1"
+				var on = switches[0] == "1"
 				this.log.info(`Socket ${index} is ${on}.`);
 				callback(null, on);
 			})
