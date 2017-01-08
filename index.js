@@ -100,7 +100,7 @@ class PDUAccessory {
 				var switch_str = switches.join();
 				varbinds = [
 					{
-						oid: switch_oid,
+						oid: testoid,
 						type: snmp.ObjectType.OctetString,
 						value: switch_str
 					}
