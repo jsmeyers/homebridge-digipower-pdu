@@ -16,7 +16,7 @@ class PDUAccessory {
 	constructor(log, config) {
 		this.log = log;
 		this.services = [];
-		for (var i = 1; i < 24; i++) {
+		for (var i = 0; i < 24; i++) {
 			var service = new Service.Outlet(`Outlet ${i}`, i);
 			this.services.push(service);
 
