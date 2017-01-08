@@ -70,7 +70,7 @@ class PDUAccessory {
 		var switch_oid = '1.3.6.1.2.1.2.2.1.8';
 		var testoid = switch_oid + '.' + index;
 		this.log.info(testoid);
-		this.snmp_get([switch_oid])
+		this.snmp_get([testoid])
 			.then(varbinds => {
 				var switches = varbinds[0].value.toString().split(',');
 				var on = switches[index] == "1"
