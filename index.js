@@ -129,7 +129,7 @@ class PDUAccessory {
 					{
 						oid: testoid,
 						type: snmp.ObjectType.Integer,
-						value: switch_str
+						value: on
 					}
 				];
 				this.log.info(varbinds);
