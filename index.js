@@ -66,7 +66,7 @@ class PDUAccessory {
 
 	getOn(index, callback) {
 		this.log.info(`Retrieving interface ${index}.`);
-		var switch_oid = '1.3.6.1.2.1.105.1.1.1.3.1.21';
+		var switch_oid = '1.3.6.1.2.1.105.1.1.1.3.1.21.0';
 		this.snmp_get([switch_oid])
 			.then(varbinds => {
 				var switches = varbinds[0].value.toString().split(',');
@@ -82,11 +82,11 @@ class PDUAccessory {
 
 	setOn(index, on, callback) {
 		this.log.info(`Switching POE interface ${index} to ${on}.`);
-		var switch_oid = '1.3.6.1.2.1.105.1.1.1.3.1.21';
+		var switch_oid = '1.3.6.1.2.1.105.1.1.1.3.1.21.0';
 		this.snmp_get([switch_oid])
 			.then(varbinds => {
 				var switches = varbinds[0].value.toString().split(',');
-				switches[index] = on ? '1' : '0';
+				switches[index] = on ? '1' : '2';
 				var switch_str = switches.join();
 				varbinds = [
 					{
