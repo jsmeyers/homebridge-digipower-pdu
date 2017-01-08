@@ -17,19 +17,10 @@ class PDUAccessory {
 		this.log = log;
 		this.services = [];
 		this.portcount = snmp.createSession(config.ip, config.snmp_community);
-		this.portcount_get = promisify(this.portcount.get.bind(this.portcount));
 		var switch_oid = '1.3.6.1.2.1.2.1.0';
-		portcounted  = this.portcount_get([switch_oid])
-			.then(varbinds => {
-				this.log.info(varbinds);
-				var switches = varbinds[0].value.toString().split(',');
-				this.log.info(switches);
-				return(switches);
-			})
-			.catch(error => {
-				this.log.info(`Error retrieving interface count.`);
-				return(error, null);
-			});
+		varbinds = this.portcount.get(switch_oid);
+		this.log.info(varbinds);
+		var portcounted = varbinds[0].value.toString().split(',');
 		this.log.info('Counted this many ports: ' + portcounted);
 		for (var i = 0; i < portcounted; i++) {
 			var service = new Service.Outlet(`Outlet ${i}`, i);
