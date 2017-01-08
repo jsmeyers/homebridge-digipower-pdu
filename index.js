@@ -24,11 +24,11 @@ class PDUAccessory {
 				this.log.info(varbinds);
 				var switches = varbinds[0].value.toString().split(',');
 				this.log.info(switches);
-				callback(switches);
+				return(switches);
 			})
 			.catch(error => {
 				this.log.info(`Error retrieving interface count.`);
-				callback(error, null);
+				return(error, null);
 			});
 		this.log.info('Counted this many ports: ' + portcounted);
 		for (var i = 0; i < portcounted; i++) {
