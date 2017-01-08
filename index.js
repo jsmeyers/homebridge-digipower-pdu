@@ -30,12 +30,12 @@ class PDUAccessory {
 		this.snmp_set = promisify(this.snmp.set.bind(this.snmp));
 
 		var outlet_oids = [];
-		for (var i = 1; i < 25; i++) {
+		for (var i = 0; i < 25; i++) {
 			outlet_oids.push(`1.3.6.1.2.1.31.1.1.1.18.${i + 1}`);
 			console.log(`oids.push 1.3.6.1.2.1.31.1.1.1.18.${i + 1}`)	
 		}
 		var promises = [];
-		for (var i = 1; i < outlet_oids.length; i += 2) {
+		for (var i = 0; i < outlet_oids.length; i += 2) {
 			var slice = outlet_oids.slice(i, i + 2);
 			promises.push(this.snmp_get(slice))
 		}
