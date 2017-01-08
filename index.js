@@ -16,7 +16,7 @@ class PDUAccessory {
 	constructor(log, config) {
 		this.log = log;
 		this.services = [];
-		for (var i = 0; i < 25; i++) {
+		for (var i = 1; i < 24; i++) {
 			var service = new Service.Outlet(`Outlet ${i}`, i);
 			this.services.push(service);
 
@@ -30,11 +30,11 @@ class PDUAccessory {
 		this.snmp_set = promisify(this.snmp.set.bind(this.snmp));
 
 		var outlet_oids = [];
-		for (var i = 0; i < 25; i++) {
+		for (var i = 1; i < 25; i++) {
 			outlet_oids.push(`1.3.6.1.2.1.31.1.1.1.18.${i + 1}`);
 		}
 		var promises = [];
-		for (var i = 0; i < outlet_oids.length; i += 2) {
+		for (var i = 1; i < outlet_oids.length; i += 2) {
 			var slice = outlet_oids.slice(i, i + 2);
 			promises.push(this.snmp_get(slice))
 		}
@@ -47,7 +47,7 @@ class PDUAccessory {
 					.map(varbind => {
 						return varbind.value.toString().split(",")[0];
 					});
-				for (var i = 0; i < names.length; i++) {
+				for (var i = 1; i < names.length; i++) {
 					var name = names[i]
 					service = this.services[i];
 					service.displayName = name;
@@ -92,7 +92,7 @@ class PDUAccessory {
 			.then(varbinds => {
 				this.log.info(varbinds);
 				var switches = varbinds[0].value.toString().split(',');
-				switches[index] = on ? '1' : '2';
+				switches[index] = on ? '1' : '0';
 				var switch_str = switches.join();
 				varbinds = [
 					{
