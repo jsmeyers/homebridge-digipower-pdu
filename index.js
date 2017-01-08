@@ -69,6 +69,7 @@ class PDUAccessory {
 	}
 	
 	getOutletInUse(index, callback) {
+		index = index + 1
 		this.log.info(`Retrieving interface ${index}.`);
 		var switch_oid = '1.3.6.1.2.1.2.2.1.8';
 		var testoid = switch_oid + '.' + index;
@@ -88,6 +89,7 @@ class PDUAccessory {
 			});	
 	}	
 	getOn(index, callback) {
+		index = index + 1
 		this.log.info(`Retrieving interface ${index}.`);
 		var switch_oid = '1.3.6.1.2.1.2.2.1.7';
 		var testoid = switch_oid + '.' + index;
