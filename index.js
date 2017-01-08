@@ -73,7 +73,7 @@ class PDUAccessory {
 		this.snmp_get([testoid])
 			.then(varbinds => {
 				this.log.info(varbinds);
-				var switches = varbinds[0].value.toString().split(',');
+				var switches = varbinds;
 				var on = switches[index] == "1"
 				this.log.info(`Socket ${index} is ${on}.`);
 				callback(null, on);
