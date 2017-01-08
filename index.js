@@ -32,6 +32,7 @@ class PDUAccessory {
 		var outlet_oids = [];
 		for (var i = 1; i < 25; i++) {
 			outlet_oids.push(`1.3.6.1.2.1.31.1.1.1.18.${i + 1}`);
+			console.log(`oids.push 1.3.6.1.2.1.31.1.1.1.18.${i + 1}`)	
 		}
 		var promises = [];
 		for (var i = 1; i < outlet_oids.length; i += 2) {
