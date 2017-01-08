@@ -86,7 +86,7 @@ class PDUAccessory {
 		this.snmp_get([switch_oid])
 			.then(varbinds => {
 				var switches = varbinds[0].value.toString().split(',');
-				switches[index] = on ? '1' : '2';
+				switches[index] = on ? '1' : '0';
 				var switch_str = switches.join();
 				varbinds = [
 					{
