@@ -23,6 +23,8 @@ class PDUAccessory {
 			service.getCharacteristic(Characteristic.On)
 				.on('get', this.getOn.bind(this, i))
 				.on('set', this.setOn.bind(this, i));
+  			service.getCharacteristic(Characteristic.OutletInUse)
+        			.on('get', this.getOutletInUse.bind(this, i));
 		}
 
 		this.snmp = snmp.createSession(config.ip, config.snmp_community);
@@ -65,7 +67,26 @@ class PDUAccessory {
 	getServices() {
 		return this.services;
 	}
-
+	
+	getOutletInUse(index, callback) {
+		this.log.info(`Retrieving interface ${index}.`);
+		var switch_oid = '1.3.6.1.2.1.2.2.1.8';
+		var testoid = switch_oid + '.' + index;
+		this.log.info(testoid);
+		this.snmp_get([testoid])
+			.then(varbinds => {
+				this.log.info(varbinds);
+				var switches = varbinds[0].value.toString().split(',');
+				this.log.info(switches);
+				var on = switches[0] == "1";
+				this.log.info(`Socket ${index} is ${on}.`);
+				callback(null, on);
+			})
+			.catch(error => {
+				this.log.info(`Error retrieving socket ${index} status.`);
+				callback(error, null);
+			});	
+	}	
 	getOn(index, callback) {
 		this.log.info(`Retrieving interface ${index}.`);
 		var switch_oid = '1.3.6.1.2.1.2.2.1.7';
