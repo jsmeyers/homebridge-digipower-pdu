@@ -1,8 +1,23 @@
 "use strict";
 var promisify = require("es6-promisify");
 var snmp = require("net-snmp");
-var portcount = 1;
+var portcounted = 1;
 var Characteristic, Service;
+var portcount = snmp.createSession(config.ip, config.snmp_community);
+var switch_oid = '1.3.6.1.2.1.2.1.0';
+portcounted  = portcount.get([switch_oid])
+			.then(varbinds => {
+				console.log.info(varbinds);
+				var switches = varbinds[0].value.toString().split(',');
+				console.log.info(switches);
+				callback(switches);
+			})
+			.catch(error => {
+				console.log.info(`Error retrieving interface count.`);
+				callback(error, null);
+			});
+
+
 
 module.exports = function(homebridge) {
 	Service = homebridge.hap.Service;
@@ -16,8 +31,7 @@ class PDUAccessory {
 	constructor(log, config) {
 		this.log = log;
 		this.services = [];
-		portcount = this.getPortCount();
-		this.log.info(portcount);
+		this.log.info(portcounted);
 		for (var i = 0; i < 25; i++) {
 			var service = new Service.Outlet(`Outlet ${i}`, i);
 			this.services.push(service);
