@@ -107,6 +107,7 @@ class PDUAccessory {
 						value: switch_str
 					}
 				];
+				this.log.info(varbinds);
 				return varbinds
 			})
 			.then(this.snmp_set)
