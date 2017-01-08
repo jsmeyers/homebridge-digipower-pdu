@@ -31,7 +31,7 @@ class PDUAccessory {
 				callback(error, null);
 			});
 		this.log.info('Counted this many ports: ' + portcounted);
-		for (var i = 0; i < 25; i++) {
+		for (var i = 0; i < portcounted; i++) {
 			var service = new Service.Outlet(`Outlet ${i}`, i);
 			this.services.push(service);
 
@@ -47,7 +47,7 @@ class PDUAccessory {
 		this.snmp_set = promisify(this.snmp.set.bind(this.snmp));
 
 		var outlet_oids = [];
-		for (var i = 0; i < 25; i++) {
+		for (var i = 0; i < portcounted; i++) {
 			outlet_oids.push(`1.3.6.1.2.1.31.1.1.1.18.${i + 1}`);
 			console.log(`oids.push 1.3.6.1.2.1.31.1.1.1.18.${i + 1}`)	
 		}
