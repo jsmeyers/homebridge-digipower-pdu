@@ -95,9 +95,11 @@ class PDUAccessory {
 			.then(varbinds => {
 				this.log.info(varbinds);
 				var switches = varbinds[0].value.toString().split(',');
-				console.log(switches);				
+				this.log.info(switches);				
 				switches[0] = on ? '1' : '2'
+				this.log.info(switches);
 				var switch_str = switches.join();
+				this.log.info(switch_str);
 				varbinds = [
 					{
 						oid: testoid,
