@@ -83,7 +83,7 @@ class PDUAccessory {
 				callback(null, on);
 			})
 			.catch(error => {
-				this.log.info(`Error retrieving socket ${index} status.`);
+				this.log.info(`Error retrieving socket ${index} in use status.`);
 				callback(error, null);
 			});	
 	}	
