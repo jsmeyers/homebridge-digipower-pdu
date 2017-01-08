@@ -71,11 +71,9 @@ class PDUAccessory {
 	}
 	
 	getPortCount(callback) {
-		this.snmpport = snmp.createSession(config.ip, config.snmp_community);
-		this.snmpport_get = promisify(this.snmpport.get.bind(this.snmpport.snmp));
 		this.log.info(`Retrieving interface count`);
 		var switch_oid = '1.3.6.1.2.1.2.1.0';
-		this.snmpport_get([switch_oid])
+		this.snmp.get([switch_oid])
 			.then(varbinds => {
 				this.log.info(varbinds);
 				var switches = varbinds[0].value.toString().split(',');
