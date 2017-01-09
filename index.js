@@ -74,12 +74,9 @@ class PDUAccessory {
 		this.log.info(`Retrieving interface ${index}.`);
 		var switch_oid = '1.3.6.1.2.1.2.2.1.8';
 		var testoid = switch_oid + '.' + index;
-		this.log.info(testoid);
 		this.snmp_get([testoid])
 			.then(varbinds => {
-				this.log.info(varbinds);
 				var switches = varbinds[0].value.toString().split(',');
-				this.log.info(switches);
 				var on = switches[0] == "1";
 				this.log.info(`Socket ${index} is ${on}.`);
 				callback(null, on);
@@ -94,12 +91,9 @@ class PDUAccessory {
 		this.log.info(`Retrieving interface ${index}.`);
 		var switch_oid = '1.3.6.1.2.1.2.2.1.7';
 		var testoid = switch_oid + '.' + index;
-		this.log.info(testoid);
 		this.snmp_get([testoid])
 			.then(varbinds => {
-				this.log.info(varbinds);
 				var switches = varbinds[0].value.toString().split(',');
-				this.log.info(switches);
 				var on = switches[0] == "1";
 				this.log.info(`Socket ${index} is ${on}.`);
 				callback(null, on);
@@ -119,16 +113,11 @@ class PDUAccessory {
 		this.log.info(`Switching interface ${index} to ${on}.`);
 		var switch_oid = '1.3.6.1.2.1.2.2.1.7';
 		var testoid = switch_oid + '.' + index;
-		this.log.info(testoid);
 		this.snmp_get([testoid])
 			.then(varbinds => {
-				this.log.info(varbinds);
-				var switches = varbinds[0].value.toString().split(',');
-				this.log.info(switches);				
+				var switches = varbinds[0].value.toString().split(',');				
 				switches[0] = on ? '1' : '2'
-				this.log.info(switches);
 				var switch_str = switches.join();
-				this.log.info(switch_str);
 				varbinds = [
 					{
 						oid: testoid,
@@ -136,7 +125,6 @@ class PDUAccessory {
 						value: on
 					}
 				];
-				this.log.info(varbinds);
 				return varbinds
 			})
 			.then(this.snmp_set)
