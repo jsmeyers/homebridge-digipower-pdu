@@ -1,7 +1,6 @@
 "use strict";
 var promisify = require("es6-promisify");
 var snmp = require("net-snmp");
-var portcounted = 1;
 var Characteristic, Service;
 
 module.exports = function(homebridge) {
@@ -16,14 +15,7 @@ class PDUAccessory {
 	constructor(log, config) {
 		this.log = log;
 		this.services = [];
-		this.portcount = snmp.createSession(config.ip, config.snmp_community);
-		var switch_oid = '1.3.6.1.2.1.2.1.0';
-		var varbinds = [];
-		varbinds = this.portcount.get.bind(switch_oid);
-		this.log.info(varbinds);
-		var portcounted = varbinds[0].value.toString().split(',');
-		this.log.info('Counted this many ports: ' + portcounted);
-		for (var i = 0; i < portcounted; i++) {
+		for (var i = 0; i < config.portcount; i++) {
 			var service = new Service.Outlet(`Outlet ${i}`, i);
 			this.services.push(service);
 
@@ -39,7 +31,7 @@ class PDUAccessory {
 		this.snmp_set = promisify(this.snmp.set.bind(this.snmp));
 
 		var outlet_oids = [];
-		for (var i = 0; i < portcounted; i++) {
+		for (var i = 0; i < config.portcount; i++) {
 			outlet_oids.push(`1.3.6.1.2.1.31.1.1.1.18.${i + 1}`);
 			console.log(`oids.push 1.3.6.1.2.1.31.1.1.1.18.${i + 1}`)	
 		}
@@ -75,21 +67,7 @@ class PDUAccessory {
 		return this.services;
 	}
 	
-	getPortCount(callback) {
-		this.log.info(`Retrieving interface count`);
-		var switch_oid = '1.3.6.1.2.1.2.1.0';
-		this.snmp.get([switch_oid])
-			.then(varbinds => {
-				this.log.info(varbinds);
-				var switches = varbinds[0].value.toString().split(',');
-				this.log.info(switches);
-				callback(switches);
-			})
-			.catch(error => {
-				this.log.info(`Error retrieving interface count.`);
-				callback(error, null);
-			});	
-	}	
+		
 	
 	getOutletInUse(index, callback) {
 		index = index + 1
