@@ -48,7 +48,7 @@ class PDUAccessory {
 					.map(varbind => {
 						return varbind.value.toString().split(",")[0];
 					});
-				for (var i = 1; i < names.length; i++) {
+				for (var i = 0; i < names.length; i++) {
 					var name = names[i]
 					service = this.services[i];
 					service.displayName = name;
